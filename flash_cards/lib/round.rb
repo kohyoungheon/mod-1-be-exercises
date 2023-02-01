@@ -8,6 +8,9 @@ class Round
     @category_hash= Hash.new
     @category_hash[:Geography] = 0
     @category_hash[:STEM] = 0
+    @correct_by_category_hash = Hash.new
+    @correct_by_category_hash[:Geography] = 0
+    @correct_by_category_hash[:STEM] = 0
     @counter = 0
     
   end
@@ -30,6 +33,7 @@ class Round
       @counter += 1
     else
       @number_incorrect +=1
+      @category_hash[@deck.cards[@counter].category] += 1
       @counter +=1
     end
       @turns << turn
@@ -48,14 +52,20 @@ class Round
     decimal_correct * 100
   end
 
-  def percent_correct_by_category(category)
+  def calculate_category_percentage
     turns.each do |trn|
       if trn.current_card.answer == trn.user_guess
-        @category_hash[trn.current_card.category] += 1
+        @correct_by_category_hash[trn.current_card.category] += 1
       end
     end
-    percentage = @category_hash[category].to_f / @deck.array_of_cards.length.to_f
+  end
+  
+  def percent_correct_by_category(category)
+    percentage = @correct_by_category_hash[category].to_f / @category_hash[category]
+    require 'pry'; binding.pry
     return percentage.to_f * 100
+    
+    
   end
 
   def current_card

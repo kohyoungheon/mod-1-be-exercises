@@ -28,7 +28,7 @@ def start
   card_9 = Card.new("How many continents exist on Earth?","7",:Geography)
   card_10 = Card.new("What is the largest continent by landmass?","Asia",:Geography)
   deck1 = Deck.new([card_1, card_2, card_3, card_4, card_5, card_6, card_7, card_8, card_9, card_10])
-  round = Round.new(deck1)
+  round1 = Round.new(deck1)
   card_counter = 1
   total_cards = deck1.count
   puts "Welcome! You're playing with #{deck1.count} cards."
@@ -37,13 +37,14 @@ def start
     puts "This is card number #{card_counter} out of #{total_cards}"
     puts card.question
     user_answer = gets.chomp
-    round.take_turn(user_answer)
+    round1.take_turn(user_answer)
     card_counter += 1
   end
   puts "****** Game over! ******"
-  puts "You had #{round.number_correct} correct guesses out of #{total_cards} for a total score of #{round.percent_correct}% "
-  puts "STEM - #{round.percent_correct_by_category(:STEM)}% correct." 
-  puts "Geography - #{round.percent_correct_by_category(:Geography)}% correct."
+  puts "You had #{round1.number_correct} correct guesses out of #{total_cards} for a total score of #{round1.percent_correct}% "
+  round1.calculate_category_percentage()
+  puts "STEM - #{round1.percent_correct_by_category(:STEM)}% correct." 
+  puts "Geography - #{round1.percent_correct_by_category(:Geography)}% correct."
   
 end
 
