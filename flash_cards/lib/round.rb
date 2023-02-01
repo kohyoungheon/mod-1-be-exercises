@@ -8,6 +8,7 @@ class Round
     @category_hash= Hash.new
     @category_hash[:Geography] = 0
     @category_hash[:STEM] = 0
+    @counter = 0
     
   end
 
@@ -22,26 +23,29 @@ class Round
     return deck.cards[0]
   end
   def take_turn(player_guess)
-    turn = Turn.new(player_guess,deck.cards[0])
-    if player_guess == deck.cards[0].answer
+    turn = Turn.new(player_guess,deck.cards[@counter])
+    if player_guess == deck.cards[@counter].answer
       @number_correct += 1
-      @category_hash[@deck.cards[0].category] += 1
+      @category_hash[@deck.cards[@counter].category] += 1
+      @counter += 1
     else
       @number_incorrect +=1
-      @category_hash[@deck.cards[0].category] += 1
+      @counter +=1
     end
-      @turns.push(turn)
-      deck.array_of_cards.shift
+      @turns << turn
+      
+      # deck.array_of_cards.shift
     return turn
   end
 
   def number_correct_by_category(category)
-    @category_hash[category] / turns.length
+    @category_hash[category] 
 
   end
 
   def percent_correct
-    integer_correct = @number_correct / turns.length * 100
+    decimal_correct = (number_correct.to_f / turns.length)
+    decimal_correct * 100
   end
 
   def percent_correct_by_category(category)
@@ -50,8 +54,8 @@ class Round
         @category_hash[trn.current_card.category] += 1
       end
     end
-    percentage = @category_hash[category] / turns.length
-    puts percentage.to_f * 100
+    percentage = @category_hash[category].to_f / @deck.array_of_cards.length.to_f
+    return percentage.to_f * 100
   end
 
   def current_card
